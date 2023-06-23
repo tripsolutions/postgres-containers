@@ -30,8 +30,16 @@ jobs:
     - name: calculate image tag
       id: vars
       run: |
-        # step 1: if exists, replace extension timescaledb with its versioned equivalent
+        # step 1: order extensions alphabetically
+        export EXTENSIONS=$(echo "${{ github.event.inputs.EXTENSIONS }}" | tr ' ' '\n' | sort | tr '\n' ' ')
+
+        # this is good but it leaves a trailing space. Fix it:
+        export EXTENSIONS=$(echo "${EXTENSIONS}" | sed 's/ $//g')
+
+        # step 2: if exists, replace extension timescaledb with its versioned equivalent; replace spaces with dashes
         export EXTENSIONS=$(echo "${{ github.event.inputs.EXTENSIONS }}" | sed 's/timescaledb/timescaledb-${{ github.event.inputs.TIMESCALEDB_VERSION }}/g;s/ /-/g')
+
+        # step 3: output variable to github action
         echo "IMAGE_TAG=${{ github.event.inputs.PG_VERSION }}-${EXTENSIONS}" >> $GITHUB_OUTPUT
     - uses: docker/build-push-action@v3
       with:
