@@ -48,6 +48,6 @@ jobs:
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/postgresql:${{ steps.vars.outputs.IMAGE_TAG }}
         build-args: |
-          PG_VERSION=${{ github.event.inputs.PG_VERSION }}
+          POSTGRESQL_VERSION=${{ github.event.inputs.PG_VERSION }}
           EXTENSIONS=${{ github.event.inputs.EXTENSIONS }}
           TIMESCALEDB_VERSION=${{ github.event.inputs.TIMESCALEDB_VERSION }}
