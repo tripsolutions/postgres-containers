@@ -32,7 +32,7 @@ jobs:
       run: |
         # step 1: if exists, replace extension timescaledb with its versioned equivalent
         export EXTENSIONS=$(echo "${{ github.event.inputs.EXTENSIONS }}" | sed 's/timescaledb/timescaledb-${{ github.event.inputs.TIMESCALEDB_VERSION }}/g;s/ /-/g')
-        echo "IMAGE_TAG="${{ github.event.inputs.PG_VERSION }}-${EXTENSIONS}" >> $GITHUB_OUTPUT
+        echo "IMAGE_TAG=${{ github.event.inputs.PG_VERSION }}-${EXTENSIONS}" >> $GITHUB_OUTPUT
     - uses: docker/build-push-action@v3
       with:
         context: .
