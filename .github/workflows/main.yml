@@ -31,14 +31,14 @@ jobs:
       id: vars
       run: |
         # step 1: if exists, replace extension timescaledb with its versioned equivalent
-        export EXTENSIONS=$(echo "${{ github.event.inputs.EXTENSIONS }}" | sed 's/timescaledb/timescaledb-${{ github.event.inputs.TIMESCALEDB_VERSION }}/g s/ /-/g')
-        echo ::set-output name=IMAGE_TAG::$(echo "${{ github.event.inputs.PG_VERSION }}-${EXTENSIONS}-${{ github.event.inputs.TIMESCALEDB_VERSION }}" | tr ' ' '-')
+        export EXTENSIONS=$(echo "${{ github.event.inputs.EXTENSIONS }}" | sed 's/timescaledb/timescaledb-${{ github.event.inputs.TIMESCALEDB_VERSION }}/g;s/ /-/g')
+        echo "IMAGE_TAG="${{ github.event.inputs.PG_VERSION }}-${EXTENSIONS}" >> $GITHUB_OUTPUT
     - uses: docker/build-push-action@v3
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/${{ github.repository }}:${{ steps.vars.outputs.IMAGE_TAG }}
+        tags: ghcr.io/${{ github.repository_owner }}/postgresql:${{ steps.vars.outputs.IMAGE_TAG }}
         build-args: |
           PG_VERSION=${{ github.event.inputs.PG_VERSION }}
           EXTENSIONS=${{ github.event.inputs.EXTENSIONS }}
